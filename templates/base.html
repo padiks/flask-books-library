@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{{title}}{% endblock %} - Books Library (Flask + Tailwind)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon" type="image/x-icon">
+  <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">{% block extra_css %}{% endblock %}
+</head>
+<body class="p-4">
+<nav class="bg-white shadow w-3/4 mx-auto rounded-lg">
+  <div class="flex justify-between items-center h-12 px-6">
+    <a href="{{ url_for('books.list') }}" class="text-base font-semibold text-gray-800">Books Library</a>
+    <div class="flex space-x-6 text-sm">
+      <a href="{{ url_for('books.list') }}" class="text-gray-700 hover:text-blue-600">Books</a>
+      <a href="{{ url_for('categories.list') }}" class="text-gray-700 hover:text-blue-600">Categories</a>
+      {% if session.get('user_id') %}
+      <a href="{{ url_for('logout') }}" class="text-gray-700 hover:text-blue-600">Logout</a>
+      {% else %}
+      <a href="{{ url_for('login') }}" class="text-gray-700 hover:text-blue-600">Login</a>
+      {% endif %}
+      <span class="text-gray-700">[{{ session.get('username')|capitalize if session.get('username') else 'Guest' }}]</span>
+    </div>
+  </div>
+</nav>
+{% block content %}{% endblock %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>{% block extra_js %}{% endblock %}
+<script>
+  $(document).ready(function() {
+    $('#data-tables-id').DataTable({
+      pageLength: 10,
+      lengthMenu: [5, 10, 20, 50],
+      columnDefs: [{ orderable: false, targets: -1 }]
+    });
+  });
+</script>
+</body>
+</html>

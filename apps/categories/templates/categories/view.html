@@ -1,0 +1,53 @@
+{# apps/categories/templates/categories/view.html #}
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-[50%] mx-auto mt-6 bg-white shadow rounded-xl p-4">
+<!-- Header -->
+<div class="mb-4">
+    <h2 class="text-lg font-semibold border-b-2 border-gray-300 pb-1 inline-block">
+        Category Details
+    </h2>
+    <p class="text-sm text-gray-500 mt-1">
+        View information about this category
+    </p>
+</div>
+
+<!-- Details Card -->
+<div class="bg-white rounded shadow overflow-hidden">
+  <dl>
+
+    <div class="flex px-4 py-2 border-b border-gray-200">
+      <dt class="w-32 text-sm font-semibold text-gray-500">ID</dt>
+      <dd class="text-sm text-gray-700">{{ category.id }}</dd>
+    </div>
+
+    <div class="flex px-4 py-2 border-b border-gray-200">
+      <dt class="w-32 text-sm font-semibold text-gray-500">Name</dt>
+      <dd class="text-sm text-gray-700">{{ category.name }}</dd>
+    </div>
+
+    <div class="flex px-4 py-2">
+      <dt class="w-32 text-sm font-semibold text-gray-500">Description</dt>
+      <dd class="text-sm text-gray-700">{{ category.description or "—" }}</dd>
+    </div>
+
+  </dl>
+</div>
+
+<!-- Actions -->
+<div class="mt-4 flex gap-1">
+  <a href="{{ url_for('categories.edit', id=category.id) }}"
+     class="bg-yellow-200 hover:bg-yellow-300 text-gray-800 text-xs px-2 py-1 rounded">
+    Edit
+  </a>
+
+  <a href="{{ url_for('categories.list') }}"
+     class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs px-2 py-1 rounded">
+    Back
+  </a>
+</div>
+</div>
+{% endblock %}
