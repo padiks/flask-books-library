@@ -11,10 +11,15 @@ Available login credentials:
 
 ---
 
-## Requirements
+## Set up enviroment & requirements
 
 ```
-pip install Flask passlib[bcrypt]
+$ cd project_folder
+$ python -m venv venv
+$ source venv/bin/activate
+(venv) $ pip install --upgrade pip
+(venv) $ pip install Flask passlib[bcrypt]
+(venv) $ flask run
 ```
 
 ---
