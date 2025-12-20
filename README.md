@@ -2,8 +2,6 @@
 
 **A modular and scalable Flask web application for managing books and categories**
 
-Frontend is a flexible shell, backend is a robust engine.
-
 The repository includes a **sample SQLite database (`db.sqlite3`)** with preloaded tables and test data.
 
 Available login credentials:
@@ -117,7 +115,7 @@ templates/
 
 * Nothing hidden.
 * All blueprints and routes are registered intentionally.
-* Matches your preference for clarity and control.
+* Matches preference for clarity and control.
 
 ---
 
