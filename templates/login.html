@@ -4,7 +4,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="max-w-sm mx-auto mt-20 p-6 bg-white shadow rounded-xl">
+<div class="max-w-lg mx-auto mt-20 p-6 bg-white shadow rounded-xl">
     <!-- Header -->
     <div class="mb-4">
         <h2 class="text-2xl font-semibold border-b-2 border-gray-300 pb-1 text-center">
@@ -54,5 +54,18 @@
             </button>
         </div>
     </form>
+
+    <!-- Credentials for guide -->
+    <div class="mt-6 p-4 border rounded bg-gray-50 text-sm text-gray-700">
+        <strong>Available login credentials:</strong>
+        <ul class="mt-2 list-disc list-inside">
+            <li><strong>User account:</strong> <code>user</code> / <code>demo</code></li>
+            <li><strong>GitHub Repository:</strong> 
+                <a href="https://github.com/padiks/flask-books-library" target="_blank" class="text-blue-500 hover:underline">
+                    https://github.com/padiks/flask-books-library
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
