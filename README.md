@@ -29,13 +29,13 @@ $ source venv/bin/activate
 ```
 project_folder/
 |
-+-- app.py                               # Entry point (like manage.py)
++-- app.py                               # Minimal entry point, calls create_app()
 +-- config.py                            # App configuration (settings.py)
 |
 +-- apps/                                # Modular blueprints (feature-based)
 |   +-- categories/
 |   |   +-- __init__.py
-|   |   +-- routes.py                    # Views
+|   |   +-- routes.py                    # Category views/routes
 |   |   +-- templates/categories/
 |   |       +-- form.html
 |   |       +-- list.html
@@ -43,9 +43,9 @@ project_folder/
 |   |
 |   +-- books/
 |   |   +-- __init__.py
-|   |   +-- routes.py
-|   |   +-- models.py
-|   |   +-- forms.py
+|   |   +-- routes.py                    # Book views/routes
+|   |   +-- models.py                    # DB access helpers / ORM-like functions
+|   |   +-- forms.py                     # Optional: WTForms or validation helpers
 |   |   +-- templates/books/
 |   |       +-- form.html
 |   |       +-- list.html
@@ -53,9 +53,17 @@ project_folder/
 |   |
 |   +-- <other-modules>/                 # Future blueprints
 |
++-- core/                                # App-wide infrastructure
+|   +-- __init__.py                      # Marks core as a Python package
+|   +-- app_factory.py                   # create_app() and blueprint registration
+|   +-- extensions.py                    # Shared extensions (DB, login, etc.)
+|   +-- auth.py                           # Login/logout/session helpers
+|   +-- errors.py                         # Global error handlers (404, 500)
+|   +-- middleware.py                     # before_request/after_request hooks
+|
 +-- templates/                            # Project-wide templates
-|   +-- base.html
-|   +-- 404.html
+|   +-- base.html                         # Base layout
+|   +-- 404.html                          # Global 404 page
 |
 +-- static/                               # Static assets
 |   +-- css/
@@ -149,13 +157,18 @@ CREATE TABLE "books" (
 
 ### ✅ Why this structure works
 
-* Modular design — each feature isolated
-* Scalable — easy to add new modules
-* Maintainable — clear separation of concerns
-* Django-like organization — familiar for long-term projects
-* Future-proof — can add DB, authentication, and more
+* **Modular** — Each feature lives in its own blueprint (`apps/books`, `apps/categories`, etc.), with its own routes, models, and templates. Blueprints can be added or removed independently.
+* **Scalable** — The `core/` folder centralizes app-wide infrastructure:
 
-Got it! Here's the updated description with your requested setup:
+  * `app_factory.py` handles app creation and blueprint registration
+  * `auth.py` manages login/logout
+  * `middleware.py` enforces global rules like login checks
+  * `errors.py` centralizes error handling
+  * `extensions.py` provides reusable helpers (DB connection, etc.)
+* **Clean app.py** — Minimal entry point, just calls `create_app()`.
+* **Maintainable** — Clear separation of concerns between core, modules, templates, and static assets.
+* **Future-proof** — Adding new modules, templates, or middleware doesn’t require touching existing modules or `app.py`.
+* **Django-like organization** — Familiar structure for long-term projects, making it easy for new developers to understand.
 
 ---
 
@@ -177,4 +190,3 @@ pip install Flask passlib[bcrypt]
 
 This project is for **learning and educational use**.
 Feel free to explore, extend, and build upon it.
-
