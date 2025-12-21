@@ -1,47 +1,101 @@
-{# apps/categories/templates/categories/form.html #}
+{# apps/books/templates/books/form.html #}
 {% extends "base.html" %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded shadow p-4">
+<div class="max-w-[60%] mx-auto mt-6 bg-white shadow rounded-xl p-4">
 
-	<!-- Header -->
-	<div class="mb-4">
-			<h2 class="text-lg font-semibold border-b-2 border-gray-300 pb-1 inline-block">
-					{{ title }}
-			</h2>
-			<p class="text-sm text-gray-500 mt-1">
-					Fill in the information below
-			</p>
-	</div>
+<!-- Header -->
+<div class="mb-4">
+    <h2 class="text-lg font-semibold border-b-2 border-gray-300 pb-1 inline-block">
+        {{ title }}
+    </h2>
+</div>
 
-  <form method="post" class="space-y-4">
-    <!-- Name -->
-    <div>
-      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-      <input type="text" name="name" id="name"
-             value="{{ category.name if category else '' }}"
-             class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700" required>
-    </div>
+<form method="post" class="space-y-4">
 
-    <!-- Description -->
-    <div>
-      <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-      <textarea name="description" id="description"
-                class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">{{ category.description if category else '' }}</textarea>
-    </div>
+<!-- Published Date -->
+<div>
+    <label class="block text-sm font-medium mb-1">Published Date</label>
+    <input type="date" name="published_date"
+           value="{{ book.published_date if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
 
-		<!-- Actions -->
-		<div class="flex gap-1 mt-4">
-				<button type="submit" class="bg-blue-200 hover:bg-blue-300 text-gray-800 text-xs px-2 py-1 rounded">
-						Save
-				</button>
-				<a href="{{ url_for('categories.list') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs px-2 py-1 rounded">
-						Cancel
-				</a>
-		</div>
+<!-- Title -->
+<div>
+    <label class="block text-sm font-medium mb-1">Title</label>
+    <input type="text" name="title"
+           value="{{ book.title if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
 
-  </form>
+<!-- Hepburn -->
+<div>
+    <label class="block text-sm font-medium mb-1">Hepburn</label>
+    <input type="text" name="hepburn"
+           value="{{ book.hepburn if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
+
+<!-- Author -->
+<div>
+    <label class="block text-sm font-medium mb-1">Author</label>
+    <input type="text" name="author"
+           value="{{ book.author if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
+
+<!-- Release -->
+<div>
+    <label class="block text-sm font-medium mb-1">Release</label>
+    <input type="text" name="release"
+           value="{{ book.release if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
+
+<!-- URL -->
+<div>
+    <label class="block text-sm font-medium mb-1">URL</label>
+    <input type="url" name="url"
+           value="{{ book.url if book else '' }}"
+           class="w-full border rounded px-3 py-2" required>
+</div>
+
+<!-- Category -->
+<div>
+    <label class="block text-sm font-medium mb-1">Category</label>
+    <select name="category_id" class="w-full border rounded px-3 py-2" required>
+        {% for c in categories %}
+        <option value="{{ c.id }}"
+            {% if book and book.category_id == c.id %}selected{% endif %}>
+            {{ c.name }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+
+<!-- Summary -->
+<div>
+    <label class="block text-sm font-medium mb-1">Summary</label>
+    <textarea name="summary"
+              rows="4"
+              class="w-full border rounded px-3 py-2">{{ book.summary if book else '' }}</textarea>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 mt-4">
+    <button type="submit"
+            class="bg-blue-200 hover:bg-blue-300 text-xs px-2 py-1 rounded">
+        Save
+    </button>
+    <a href="{{ url_for('books.list') }}"
+       class="bg-gray-200 hover:bg-gray-300 text-xs px-2 py-1 rounded">
+        Cancel
+    </a>
+</div>
+
+</form>
 </div>
 {% endblock %}
