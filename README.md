@@ -77,7 +77,6 @@ project_folder/
 apps/
   categories/
   books/
-  users/      # Future modules
 ```
 
 * Each feature owns its routes, templates, and models.
