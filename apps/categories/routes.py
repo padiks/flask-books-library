@@ -1,6 +1,7 @@
 import sqlite3
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session, abort
+from core.extensions import get_db_connection  # DB connection helper coming from core/extensions.py
 
 categories_bp = Blueprint(
     "categories",
@@ -8,11 +9,6 @@ categories_bp = Blueprint(
     template_folder="templates"
 )
 
-def get_db_connection():
-    db_path = current_app.config["DATABASE"]
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row  # dict-like access
-    return conn
 
 # ---------------------------
 # Admin Required Decorator
