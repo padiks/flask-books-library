@@ -11,7 +11,7 @@ Available login credentials:
 
 ---
 
-## Set up enviroment & requirements
+## Set up enviroment & Requirements
 
 ```
 $ cd project_folder
@@ -36,8 +36,6 @@ project_folder/
 |   +-- categories/
 |   |   +-- __init__.py
 |   |   +-- routes.py                    # Views
-|   |   +-- models.py                    # Database models
-|   |   +-- forms.py                     # WTForms (optional)
 |   |   +-- templates/categories/
 |   |       +-- form.html
 |   |       +-- list.html
@@ -62,8 +60,6 @@ project_folder/
 +-- static/                               # Static assets
 |   +-- css/
 |   |   +-- style.css
-|   +-- img/
-|       +-- favicon.png
 |
 +-- instance/
     +-- db.sqlite3                        # SQLite DB (kept out of git)
@@ -160,9 +156,26 @@ CREATE TABLE "books" (
 * Django-like organization — familiar for long-term projects
 * Future-proof — can add DB, authentication, and more
 
+Got it! Here's the updated description with your requested setup:
+
+---
+
+## Pythonanywhere.com / Set up Environment & Requirements
+
+To set up your Flask project on PythonAnywhere, follow these steps to create a virtual environment, install dependencies, and upload your project files. Note that WSGI setup is **not included** in this guide.
+
+```
+cd ~
+python3.13 -m venv books-venv
+source books-venv/bin/activate
+pip install --upgrade pip
+pip install Flask passlib[bcrypt]
+```
+
 ---
 
 ## 📄 License
 
 This project is for **learning and educational use**.
 Feel free to explore, extend, and build upon it.
+
