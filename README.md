@@ -73,7 +73,7 @@ project_folder/
     +-- db.sqlite3                        # SQLite DB (kept out of git)
 ```
 
-> ✅ This is a modular, scalable, and Django-like project structure — perfect for small to medium Flask web apps.
+> ✅ This is a modular, scalable, and Django-like project structure — perfect for small to medium web apps.
 
 ---
 
