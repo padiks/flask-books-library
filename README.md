@@ -45,7 +45,6 @@ project_folder/
 |   |   +-- __init__.py
 |   |   +-- routes.py                    # Book views/routes
 |   |   +-- models.py                    # DB access helpers / ORM-like functions
-|   |   +-- forms.py                     # Optional: WTForms or validation helpers
 |   |   +-- templates/books/
 |   |       +-- form.html
 |   |       +-- list.html
@@ -64,6 +63,7 @@ project_folder/
 +-- templates/                            # Project-wide templates
 |   +-- base.html                         # Base layout
 |   +-- 404.html                          # Global 404 page
+|   +-- login.html                        # Global login page
 |
 +-- static/                               # Static assets
 |   +-- css/
