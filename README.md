@@ -70,7 +70,7 @@ project_folder/
 |   |   +-- style.css
 |
 +-- instance/
-    +-- db.sqlite3                        # SQLite DB (kept out of git)
+    +-- db.sqlite3                        # SQLite DB 
 ```
 
 > ✅ This is a modular, scalable, and Django-like project structure — perfect for small to medium web apps.
@@ -180,8 +180,8 @@ To set up your Flask project on PythonAnywhere, follow these steps to create a v
 cd ~
 python3.13 -m venv books-venv
 source books-venv/bin/activate
-pip install --upgrade pip
-pip install Flask passlib[bcrypt]
+(venv) pip install --upgrade pip
+(venv) pip install Flask passlib[bcrypt]
 ```
 
 ---
