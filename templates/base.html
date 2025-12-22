@@ -46,7 +46,8 @@
     $('#data-tables-id').DataTable({
       pageLength: 10,
       lengthMenu: [5, 10, 20, 50],
-      columnDefs: [{ orderable: false, targets: -1 }]
+      columnDefs: [{ orderable: false, targets: -1 }],
+      order: [[3, "desc"]]  // Sort by 2nd column (published_date) descending
     });
   });
 </script>
