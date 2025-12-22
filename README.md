@@ -1,253 +1,217 @@
-# 📘 **Django – Guide 17: Task Using JSON (Create, Read, Update, Delete)**
+# Flask Books List — Modular & Scalable Architecture
 
-This guide walks you through building a simple **Task manager** in Django using a JSON file instead of a database.
-You will learn how to store tasks inside the **media** folder, display them in a Bootstrap table, and allow Admin users to **create**, **edit**, and **delete** tasks.
+**A modular and scalable Flask web application for managing books and categories**
 
----
+The repository includes a **sample SQLite database (`db.sqlite3`)** with preloaded tables and test data.
 
-## 🎯 **Objectives**
+Available login credentials:
 
-By the end of this guide, you will:
+* **User account:** `user` / `@User123`
+* **Admin account:** `admin` / `root`
 
-* ✅ Store tasks inside a `tasks.json` file
-* ✅ Read, write, and update JSON data from Django
-* ✅ Display tasks in a Bootstrap table
-* ✅ Format timestamps nicely
-* ✅ Restrict editing to **Admin** group users
-* ✅ Implement full CRUD (Create, Read, Update, Delete)
+You can **check the running project online** at: [https://bukksu.pythonanywhere.com](https://bukksu.pythonanywhere.com) ✅ 
 
 ---
 
-## 📁 **Project Structure**
+## Set up environment & Requirements
+
+```
+$ cd project_folder
+$ python -m venv venv
+$ source venv/bin/activate
+(venv) $ pip install --upgrade pip
+(venv) $ pip install Flask passlib[bcrypt]
+(venv) $ flask run
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 project_folder/
-├── manage.py
-├── core/
-│   ├── settings.py
-│   └── urls.py
-│
-├── apps/
-│   ├── taskjson/
-│   │   ├── apps.py
-│   │   ├── views.py          ← JSON CRUD logic
-│   │   ├── urls.py           ← Task URLs
-│   │   └── templates/
-│       └── taskjson/
-│           ├── index.html    ← Task list
-│           ├── create_task.html
-│           └── edit_task.html
-│
-├── media/
-│   └── tasks.json            ← JSON storage file
+|
++-- app.py                               # Minimal entry point, calls create_app()
++-- config.py                            # App configuration (settings.py)
+|
++-- apps/                                # Modular blueprints (feature-based)
+|   +-- categories/
+|   |   +-- __init__.py
+|   |   +-- routes.py                    # Category views/routes
+|   |   +-- templates/categories/
+|   |       +-- form.html
+|   |       +-- list.html
+|   |       +-- view.html
+|   |
+|   +-- books/
+|   |   +-- __init__.py
+|   |   +-- routes.py                    # Book views/routes
+|   |   +-- models.py                    # DB access helpers / ORM-like functions
+|   |   +-- templates/books/
+|   |       +-- form.html
+|   |       +-- list.html
+|   |       +-- view.html
+|   |
+|   +-- <other-modules>/                 # Future blueprints
+|
++-- core/                                # App-wide infrastructure
+|   +-- __init__.py                      # Marks core as a Python package
+|   +-- app_factory.py                   # create_app() and blueprint registration
+|   +-- extensions.py                    # Shared extensions (DB, login, etc.)
+|   +-- auth.py                           # Login/logout/session helpers
+|   +-- errors.py                         # Global error handlers (404, 500)
+|   +-- middleware.py                     # before_request/after_request hooks
+|
++-- templates/                            # Project-wide templates
+|   +-- base.html                         # Base layout
+|   +-- 404.html                          # Global 404 page
+|   +-- login.html                        # Global login page
+|
++-- static/                               # Static assets
+|   +-- css/
+|   |   +-- style.css
+|
++-- instance/
+    +-- db.sqlite3                        # SQLite DB 
+```
+
+> ✅ This is a modular, scalable, and Django-like project structure — perfect for small to medium web apps.
+
+---
+
+## Key Principles
+
+### 1️⃣ Blueprints per feature
+
+```text
+apps/
+  categories/
+  books/
+```
+
+* Each feature owns its routes, templates, and models.
+* Easy to extend, disable, or maintain.
+
+---
+
+### 2️⃣ Application Factory
+
+```text
+core/__init__.py   ← create_app()
+config.py
+```
+
+* Clean startup with environment configurations.
+* Enables testing, CLI commands, multiple instances.
+
+---
+
+### 3️⃣ Templates Layout
+
+```
+templates/
+  base.html
+  includes/
+  app_name/
+```
+
+* Prevents collisions
+* Enables reuse
+* Matches professional Flask practices
+
+---
+
+### 4️⃣ Explicit Registration
+
+* Nothing hidden.
+* All blueprints and routes are registered intentionally.
+* Matches preference for clarity and control.
+
+---
+
+### 5️⃣ Database Table Example
+
+```sql
+CREATE TABLE "categories" (
+	"id"	integer NOT NULL,
+	"name"	varchar(255) NOT NULL UNIQUE,
+	"description"	text,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+```
+
+```sql
+CREATE TABLE "books" (
+    "id"            INTEGER PRIMARY KEY AUTOINCREMENT,
+    "published_date" DATE NOT NULL,
+    "title"         VARCHAR(255) NOT NULL,
+    "hepburn"       VARCHAR(255) NOT NULL,
+    "author"        VARCHAR(255) NOT NULL,
+    "release"       VARCHAR(255) NOT NULL,
+    "url"           VARCHAR(255) NOT NULL,
+    "summary"       TEXT,
+    "category_id"   INTEGER NOT NULL,
+    FOREIGN KEY("category_id") REFERENCES "categories"("id") DEFERRABLE INITIALLY DEFERRED
+);
 ```
 
 ---
 
-## 1️⃣ **Create the App**
+### ✅ Why this structure works
 
-If not created yet:
+* **Modular** — Each feature lives in its own blueprint (`apps/books`, `apps/categories`, etc.), with its own routes, models, and templates. Blueprints can be added or removed independently.
+* **Scalable** — The `core/` folder centralizes app-wide infrastructure:
+
+  * `app_factory.py` handles app creation and blueprint registration
+  * `auth.py` manages login/logout
+  * `middleware.py` enforces global rules like login checks
+  * `errors.py` centralizes error handling
+  * `extensions.py` provides reusable helpers (DB connection, etc.)
+* **Clean app.py** — Minimal entry point, just calls `create_app()`.
+* **Maintainable** — Clear separation of concerns between core, modules, templates, and static assets.
+* **Future-proof** — Adding new modules, templates, or middleware doesn’t require touching existing modules or `app.py`.
+* **Django-like organization** — Familiar structure for long-term projects, making it easy for new developers to understand.
+
+---
+
+## PythonAnywhere.com — Set Up Environment, Requirements & WSGI
+
+This guide explains how to prepare your Flask project on PythonAnywhere by creating a virtual environment, installing dependencies, and configuring WSGI. Make sure to **use Python 3.11** explicitly.
+
+> **Note:** Your project files should already be uploaded to `/home/bukksu/library`.
 
 ```bash
-python manage.py startapp taskjson
-mv taskjson apps/
+cd ~
+python3.11 --version
+python3.11 -m venv bukksu-venv
+source bukksu-venv/bin/activate
+pip install --upgrade pip
+pip install Flask passlib[bcrypt]
 ```
 
-Then add to:
+### WSGI Setup
 
-### `core/settings.py`
-
-```python
-INSTALLED_APPS = [
-    ...
-    'apps.taskjson',
-]
-```
-
----
-
-## 2️⃣ **Define URLs**
-
-### `apps/taskjson/urls.py`
+1. In the **Web tab**, create a new web app with **manual configuration** and **Python 3.11**.
+2. Set the **Virtualenv** path to `/home/bukksu/bukksu-venv`.
+3. Edit the WSGI file to point to your project folder and Flask app:
 
 ```python
-from django.urls import path
-from . import views
-
-app_name = 'taskjson'
-
-urlpatterns = [
-    path('', views.index, name='index'),
-    path('create/', views.create_task, name='create_task'),
-    path('edit/<int:task_id>/', views.edit_task, name='edit_task'),
-    path('delete/<int:task_id>/', views.delete_task, name='delete_task'),
-]
-```
-
-### Include in main `core/urls.py`
-
-```python
-path('taskjson/', include('apps.taskjson.urls')),
-```
-
----
-
-## 3️⃣ **Task JSON Logic**
-
-### `apps/taskjson/views.py`
-
-This file handles:
-
-✔ JSON file creation
-✔ Reading & writing
-✔ Display tasks
-✔ Admin-only access
-✔ Date formatting
-
-(💙 This is exactly your working code; no logic is changed.)
-
-```python
-import json
+import sys
 import os
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.conf import settings
-from datetime import datetime
 
-TASKS_FILE = os.path.join(settings.MEDIA_ROOT, 'tasks.json')
+project_home = '/home/bukksu/library'
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
 
-if not os.path.exists(TASKS_FILE):
-    with open(TASKS_FILE, 'w') as f:
-        json.dump([], f)
-
-
-def read_tasks():
-    with open(TASKS_FILE, 'r') as f:
-        return json.load(f)
-
-
-def write_tasks(tasks):
-    with open(TASKS_FILE, 'w') as f:
-        json.dump(tasks, f, indent=4)
-
-
-def index(request):
-    user_groups = request.user.groups.values_list('name', flat=True)
-    user_group = user_groups[0] if user_groups else None
-
-    tasks = read_tasks()
-
-    for task in tasks:
-        created = task.get("created_at", "")
-        if isinstance(created, str):
-            cleaned = created.split(".")[0]
-            try:
-                dt = datetime.strptime(cleaned, "%Y-%m-%dT%H:%M:%S")
-                task["created_at"] = dt.strftime("%-d %B %Y")
-            except ValueError:
-                task["created_at"] = created
-
-    return render(request, 'taskjson/index.html', {
-        'title': 'Task using JSON',
-        'json_file': tasks,
-        'user_group': user_group,
-    })
-
-
-def create_task(request):
-    if not (request.user.is_superuser or request.user.groups.filter(name='Admin').exists()):
-        messages.warning(request, "You do not have permission to add tasks.")
-        return redirect('taskjson:index')
-
-    if request.method == "POST":
-        task_name = request.POST.get('task', '')
-        if task_name:
-            tasks = read_tasks()
-            new_task = {
-                "id": len(tasks) + 1,
-                "task": task_name,
-                "completed": False,
-                "created_at": datetime.now().isoformat()
-            }
-            tasks.append(new_task)
-            write_tasks(tasks)
-            return redirect('taskjson:index')
-
-    return render(request, 'taskjson/create_task.html', {
-        'title': 'Add New Task'
-    })
-
-
-def edit_task(request, task_id):
-    if not (request.user.is_superuser or request.user.groups.filter(name='Admin').exists()):
-        messages.warning(request, "You do not have permission to edit tasks.")
-        return redirect('taskjson:index')
-
-    tasks = read_tasks()
-    task = next((t for t in tasks if t["id"] == task_id), None)
-
-    if not task:
-        messages.error(request, "Task not found.")
-        return redirect('taskjson:index')
-
-    if request.method == "POST":
-        task['task'] = request.POST.get('task', task['task'])
-        task['completed'] = 'completed' in request.POST
-        write_tasks(tasks)
-        return redirect('taskjson:index')
-
-    return render(request, 'taskjson/edit_task.html', {
-        'title': 'Edit Task',
-        'task': task
-    })
-
-
-def delete_task(request, task_id):
-    if not (request.user.is_superuser or request.user.groups.filter(name='Admin').exists()):
-        messages.warning(request, "You do not have permission to delete tasks.")
-        return redirect('taskjson:index')
-
-    tasks = read_tasks()
-    task = next((t for t in tasks if t["id"] == task_id), None)
-
-    if not task:
-        messages.error(request, "Task not found.")
-        return redirect('taskjson:index')
-
-    tasks.remove(task)
-    write_tasks(tasks)
-    return redirect('taskjson:index')
+from core.app_factory import create_app
+application = create_app()
 ```
 
----
-
-## 4️⃣ **Task List Template**
-
-### `templates/taskjson/index.html`
-
-Displays all tasks in a table with Edit/Delete buttons for Admins.
-
-(Exactly your current working template.)
+4. **Reload** the web app — your Flask application should now be live.
 
 ---
 
-## 5️⃣ **Create Task Template**
+## 📄 License
 
-### `templates/taskjson/create_task.html`
-
-Simple task input form.
-
----
-
-## 6️⃣ **Edit Task Template**
-
-### `templates/taskjson/edit_task.html`
-
-Allows modifying the task & mark completed.
-
-
----
-
-✅ **Congratulations!**
-
-You can now visit **`/taskjson/`** in your browser to view, add, edit, and delete tasks stored in your JSON file.
+This project is for **learning and educational use**.
+Feel free to explore, extend, and build upon it.
