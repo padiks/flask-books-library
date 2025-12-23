@@ -20,7 +20,7 @@ $ cd project_folder
 $ python -m venv venv
 $ source venv/bin/activate
 (venv) $ pip install --upgrade pip
-(venv) $ pip install Flask passlib[bcrypt]
+(venv) $ pip install Flask passlib[bcrypt] pandas openpyxl
 (venv) $ flask run
 ```
 
@@ -174,6 +174,25 @@ CREATE TABLE "books" (
 
 ---
 
+## 🧩 Additional Modules
+
+### 1️⃣ Primer Module
+
+* Demonstrates basic Flask features: Blueprints, templates, GET/POST handling, and simple operations.
+* Example functionality includes showing messages, calculating sums, and performing operations via form inputs.
+* Serves as a **hands-on learning module** for understanding Flask routing and template rendering.
+
+### 2️⃣ Excel Module
+
+* Enables uploading and displaying Excel files (`excel.xlsx`) directly in the browser.
+* Uses **Pandas** and **Openpyxl** to read `.xlsx` files.
+* Shows the first **10 rows and 6 columns** in a clean HTML table with optional admin-restricted upload functionality.
+* Useful for **quickly viewing or managing data online** without needing a separate local Excel client.
+
+> Both modules are **modular and scalable**, following the same blueprint pattern as other apps (`apps/primer` and `apps/excel`) and can be **added or removed independently**.
+
+---
+
 ## PythonAnywhere.com — Set Up Environment, Requirements & WSGI
 
 This guide explains how to prepare your Flask project on PythonAnywhere by creating a virtual environment, installing dependencies, and configuring WSGI. Make sure to **use Python 3.11** explicitly.
@@ -186,7 +205,7 @@ python3.11 --version
 python3.11 -m venv bukksu-venv
 source bukksu-venv/bin/activate
 pip install --upgrade pip
-pip install Flask passlib[bcrypt]
+pip install Flask passlib[bcrypt] pandas openpyxl
 ```
 
 ### WSGI Setup
