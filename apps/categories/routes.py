@@ -2,6 +2,7 @@ import sqlite3
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session, abort
 from core.extensions import get_db_connection  # DB connection helper coming from core/extensions.py
+from core.auth import admin_required # Decorator @admin_required coming from core/auth.py
 
 categories_bp = Blueprint(
     "categories",
@@ -9,22 +10,6 @@ categories_bp = Blueprint(
     template_folder="templates"
 )
 
-
-# ---------------------------
-# Admin Required Decorator
-# ---------------------------
-def admin_required(f):
-    """
-    Decorator to protect routes that should only be accessible by the admin user.
-    If a non-admin tries to access, it returns a 403 Forbidden error.
-    Usage: add @admin_required above your route definition.
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("username") != "admin":
-            abort(403)
-        return f(*args, **kwargs)
-    return decorated_function
 
 # ---------------------------
 # List Categories
