@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Excel Data{% endblock %}
+
+{% block content %}
+<div class="max-w-[80%] mx-auto mt-6 bg-white shadow rounded-xl p-4">
+  <!-- Header -->
+  <div class="mb-4">
+    <h2 class="text-lg font-semibold border-b-2 border-gray-300 pb-1 inline-block">
+      Displaying Excel Data in Flask
+    </h2>
+    <p class="text-sm text-gray-500 mt-1">
+      Displaying the content of an Excel file as a table in Flask.
+    </p>
+  </div>
+
+	<!-- Only show the form if the user is admin -->
+	{% if session.username == 'admin' %}
+		<!-- Upload Form -->
+		<form method="POST" enctype="multipart/form-data">
+			<div class="flex items-center space-x-4 mt-4">
+				<input type="file" name="file" class="p-2 border border-gray-300 rounded-lg" />
+				<button type="submit" class="bg-blue-500 text-white p-2 rounded-lg font-semibold hover:bg-blue-600">
+					Upload Excel
+				</button>
+			</div>
+		</form>
+	{% endif %}
+
+  <hr class="my-4 border-gray-300">
+
+  <!-- Display Excel Data Table -->
+  {% if excel_data %}
+  <div class="bg-white rounded shadow overflow-hidden">
+    <table class="min-w-full table-auto">
+      <tbody>
+        {% for row in excel_data %}
+          <tr class="hover:bg-gray-50">
+            {% for cell in row %}
+              <td class="px-4 py-2 border-b text-sm text-gray-700">
+                {{ cell|int if cell is number else cell }}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-sm text-gray-500 mt-4">No Excel file to display. Please upload one.</p>
+  {% endif %}
+
+  <!-- Actions -->
+  <div class="mt-4 flex gap-1">
+    <a href="{{ url_for('books.list') }}"
+       class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs px-2 py-1 rounded">
+      Back
+    </a>
+  </div>
+</div>
+{% endblock %}
