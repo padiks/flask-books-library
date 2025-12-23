@@ -29,6 +29,8 @@
     <div class="flex space-x-6 text-sm">
       <a href="{{ url_for('books.list') }}" class="text-gray-700 hover:text-blue-600">Books</a>
       <a href="{{ url_for('categories.list') }}" class="text-gray-700 hover:text-blue-600">Categories</a>
+			<a href="{{ url_for('excel.list') }}" class="text-gray-700 hover:text-blue-600">Excel</a>
+			<a href="{{ url_for('primer.view') }}" class="text-gray-700 hover:text-blue-600">Primer</a>
       {% if session.get('user_id') %}
       <a href="{{ url_for('logout') }}" class="text-gray-700 hover:text-blue-600">Logout</a>
       {% else %}
