@@ -110,9 +110,11 @@ config.py
 
 ```
 templates/
+  404.html
   base.html
-  includes/
-  app_name/
+  login.html
+  includes/   # optional
+  app_name/   # optional
 ```
 
 * Prevents collisions
