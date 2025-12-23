@@ -3,6 +3,7 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session, abort
 from .models import get_all_books, get_book, get_categories
 from core.extensions import get_db_connection  # DB connection helper coming from core/extensions.py
+from core.auth import admin_required # Decorator @admin_required coming from core/auth.py
 
 books_bp = Blueprint(
     "books",
@@ -10,16 +11,6 @@ books_bp = Blueprint(
     template_folder="templates"
 )
 
-# ---------------------------
-# Admin Required Decorator
-# ---------------------------
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("username") != "admin":
-            abort(403)
-        return f(*args, **kwargs)
-    return decorated_function
 
 # ---------------------------
 # List Books
