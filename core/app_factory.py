@@ -18,8 +18,10 @@ from flask import Flask, redirect, url_for, session
 from config import Config
 
 # Import blueprints (feature-based modules)
+from apps.primer.routes import primer_bp
 from apps.categories.routes import categories_bp
 from apps.books.routes import books_bp
+from apps.excel.routes import excel_bp
 
 # Import core infrastructure
 from core.auth import register_auth
@@ -69,8 +71,10 @@ def create_app():
     # Register blueprints
     # -------------------------
     # Modular feature-based routes (e.g., books, categories)
+    app.register_blueprint(primer_bp, url_prefix="/primer")		
     app.register_blueprint(categories_bp, url_prefix="/categories")
     app.register_blueprint(books_bp, url_prefix="/books")
+    app.register_blueprint(excel_bp, url_prefix="/excel")		
 
     # -------------------------
     # Register global infrastructure

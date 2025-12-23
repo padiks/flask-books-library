@@ -11,7 +11,8 @@ from flask import render_template, request, redirect, url_for, session, flash
 from passlib.hash import django_pbkdf2_sha256
 
 from core.extensions import get_db_connection  # Shared DB connection helper
-
+from functools import wraps
+from flask import abort
 
 # -----------------------------
 # Register Authentication Routes
@@ -77,3 +78,19 @@ def register_auth(app):
         """
         session.clear()
         return redirect(url_for("login"))
+
+# ---------------------------
+# Admin Required Decorator
+# ---------------------------
+def admin_required(f):
+    """
+    Decorator to protect routes that should only be accessible by the admin user.
+    If a non-admin tries to access, it returns a 403 Forbidden error.
+    Usage: add @admin_required above your route definition.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("username") != "admin":
+            abort(403)  # Forbidden
+        return f(*args, **kwargs)
+    return decorated_function
